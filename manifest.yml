@@ -1,0 +1,45 @@
+lzc-sdk-version: "0.1"
+name: gathio
+package: cloud.lazycat.app.gathio
+version: 1.5.1
+description: 一个简单、联合、隐私优先的活动托管平台。
+homepage: https://github.com/lowercasename/gathio
+author: lowercasename
+application:
+  subdomain: gathio
+  background_task: true
+  multi_instance: false
+  gpu_accel: false
+  kvm_accel: false
+  usb_accel: false
+  public_path:
+    - /
+  routes:
+    - /=http://gathio-app:3000/
+services:
+  gathio-app:
+    container_name: gathio-app
+    image: registry.lazycat.cloud/czyt/lowercasename/gathio:6fad3688c4a3a612
+    depends_on:
+      - gathio-db
+    binds:
+      - /lzcapp/var/config:/app/config
+      - /lzcapp/var/static:/app/static
+      - /lzcapp/var/images:/app/public/events
+    setup_script: |
+      if [ ! -f /app/config/config.toml ]; then
+          echo "Config file does not exist, copying..."
+          cp /lzcapp/pkg/content/config.toml /app/config/config.toml
+          if [ -z "$LAZYCAT_APP_DOMAIN" ]; then
+              echo "Error: Environment variable LAZYCAT_APP_DOMAIN is not set."
+              exit 1
+          fi
+          sed -i.bak "s/^\( *[dD]omain *= *\)\".*\"/\1\"$LAZYCAT_APP_DOMAIN\"/" /app/config/config.toml
+      fi
+      grep "domain =" /app/config/config.toml
+
+  gathio-db:
+    container_name: gathio-db
+    image: docker.1ms.run/mongo:4.4
+    binds:
+      - /lzcapp/var/db:/data/db
