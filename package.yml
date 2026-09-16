@@ -1,5 +1,5 @@
 package: cloud.lazycat.app.gathio
-version: 1.5.1
+version: 1.6.7
 name: gathio
 description: "一个简单、联合、隐私优先的活动托管平台。"
 min_os_version: "1.5.0"
