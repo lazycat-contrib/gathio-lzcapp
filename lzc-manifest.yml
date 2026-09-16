@@ -1,25 +1,18 @@
 lzc-sdk-version: "0.1"
-name: gathio
-package: cloud.lazycat.app.gathio
-version: 1.5.1
-description: 一个简单、联合、隐私优先的活动托管平台。
-homepage: https://github.com/lowercasename/gathio
-author: lowercasename
 application:
   subdomain: gathio
   background_task: true
   multi_instance: false
-  gpu_accel: false
-  kvm_accel: false
-  usb_accel: false
   public_path:
     - /
-  routes:
-    - /=http://gathio-app:3000/
+  upstreams:
+    - location: /
+      backend: http://gathio-app:3000/
 services:
   gathio-app:
     container_name: gathio-app
-    image: registry.lazycat.cloud/czyt/lowercasename/gathio:6fad3688c4a3a612
+    # upstream: ghcr.io/lowercasename/gathio:1.6.7
+    image: ghcr.1ms.run/lowercasename/gathio:1.6.7
     depends_on:
       - gathio-db
     binds:
@@ -37,9 +30,9 @@ services:
           sed -i.bak "s/^\( *[dD]omain *= *\)\".*\"/\1\"$LAZYCAT_APP_DOMAIN\"/" /app/config/config.toml
       fi
       grep "domain =" /app/config/config.toml
-
   gathio-db:
     container_name: gathio-db
-    image: docker.1ms.run/mongo:4.4
+    # upstream: library/mongo:4.4.30
+    image: docker.1ms.run/library/mongo:4.4.30
     binds:
       - /lzcapp/var/db:/data/db

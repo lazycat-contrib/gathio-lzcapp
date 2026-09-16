@@ -1,0 +1,52 @@
+version: 1
+
+project:
+  root: .
+  build_config: lzc-build.yml
+  package_file: package.yml
+  output: .lazycat-build/gathio.lpk
+  target_arch: amd64
+
+update:
+  strategy: publish
+  allow_downgrade: false
+  version_source:
+    type: image
+    image: gathio-app
+
+build:
+  run_buildscript: false
+
+images:
+  # 主应用：上游 ghcr.io/lowercasename/gathio 有完整三段 SemVer tag（1.x），排除 latest/commit-hash
+  - id: gathio-app
+    target: service
+    service: gathio-app
+    source: ghcr.io/lowercasename/gathio
+    channel: stable
+    sort: semver
+    tag_regex: '^v?\d+\.\d+\.\d+$'
+    delivery:
+      mode: mirror
+  # 辅助 mongo：跟随原 manifest 的 4.4 家族（4.4.x immutable），排除裸 4.4（mutable）→ custom + 版本映射
+  - id: gathio-db
+    target: service
+    service: gathio-db
+    source: library/mongo
+    channel: custom
+    sort: semver
+    tag_regex: '^4\.4\.\d+$'
+    version_regex: '^(?P<version>4\.4\.\d+)$'
+    version_template: '{version}'
+    delivery:
+      mode: mirror
+
+stores:
+  official:
+    # Official store publication is intentionally disabled; publish only to Miaomiao Store.
+    enabled: false
+  private:
+    enabled: true
+    skip_if_version_exists: true
+    name: gathio
+    summary: "一个简单、联合、隐私优先的活动托管平台。"

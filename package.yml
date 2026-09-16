@@ -1,0 +1,14 @@
+package: cloud.lazycat.app.gathio
+version: 1.5.1
+name: gathio
+description: "一个简单、联合、隐私优先的活动托管平台。"
+min_os_version: "1.5.0"
+homepage: https://github.com/lowercasename/gathio
+author: lowercasename
+locales:
+  zh:
+    name: gathio
+    description: "一个简单、联合、隐私优先的活动托管平台。"
+  en:
+    name: gathio
+    description: "A simple, federated, privacy-first event hosting platform."
