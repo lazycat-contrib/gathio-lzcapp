@@ -11,8 +11,8 @@ application:
 services:
   gathio-app:
     container_name: gathio-app
-    # upstream: ghcr.io/lowercasename/gathio:1.6.7
-    image: ghcr.1ms.run/lowercasename/gathio:1.6.7
+    # upstream: ghcr.io/lowercasename/gathio:1.7.0
+    image: ghcr.1ms.run/lowercasename/gathio:1.7.0
     depends_on:
       - gathio-db
     binds:

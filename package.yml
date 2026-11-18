@@ -1,6 +1,6 @@
 package: cloud.lazycat.app.gathio
 license: GPL-3.0
-version: 1.6.7
+version: 1.7.0
 name: gathio
 description: "一个简单、联合、隐私优先的活动托管平台。"
 min_os_version: "1.5.0"
